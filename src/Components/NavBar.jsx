@@ -303,7 +303,8 @@ export default function NavBar() {
         >
           <MenuItem
             onClick={() => {
-              navigate("/"), localStorage.removeItem("Logged in ID");
+              navigate("/ExpenseEase/"),
+                localStorage.removeItem("Logged in ID");
               setIsSettingsMenuOpen(false);
             }}
             sx={{ color: "black" }}

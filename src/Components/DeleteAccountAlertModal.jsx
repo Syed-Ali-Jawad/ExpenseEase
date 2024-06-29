@@ -19,7 +19,7 @@ export default function DeleteAccountAlertModal() {
   const userData = useSelector((state) => state.userDetail);
   const navigate = useNavigate();
   function deleteAccountHandler() {
-    navigate("/login");
+    navigate("/ExpenseEase/");
     dispatch(isDeleteAccountModalOpen(false));
     let itemsToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {

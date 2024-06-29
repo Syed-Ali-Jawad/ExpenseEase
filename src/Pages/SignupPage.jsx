@@ -39,7 +39,7 @@ export default function SignupPage() {
       })
     );
     localStorage.setItem(`${email} IncomeAccounts`, JSON.stringify(["Cash"]));
-    navigate("/login");
+    navigate("/ExpenseEase/");
   }
   return (
     <div className="w-screen h-screen sm:grid grid-cols-2">
@@ -146,7 +146,7 @@ export default function SignupPage() {
           </Button>
           <p>
             Already have an account?{" "}
-            <Link className="text-blue-500" to="/">
+            <Link className="text-blue-500" to="/ExpenseEase/">
               Login
             </Link>{" "}
           </p>

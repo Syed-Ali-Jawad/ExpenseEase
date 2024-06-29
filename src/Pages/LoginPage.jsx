@@ -28,7 +28,7 @@ export default function LoginPage() {
         setLoginError(null);
         localStorage.setItem("Logged in ID", JSON.stringify(userdata));
         dispatch(setUserDetail(userdata));
-        navigate("/home");
+        navigate("/ExpenseEase/home");
       } else {
         setLoginError(<p>Wrong Credentials</p>);
       }
@@ -102,7 +102,7 @@ export default function LoginPage() {
           </Button>
           <p>
             Don't have an account?{" "}
-            <Link className="text-blue-500" to="/signup">
+            <Link className="text-blue-500" to="/ExpenseEase/signup">
               SignUp
             </Link>{" "}
           </p>
