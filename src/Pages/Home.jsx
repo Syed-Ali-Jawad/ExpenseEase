@@ -76,8 +76,12 @@ export default function Home() {
   const expensesTableColumns = [
     { field: "category", headerName: "Category", width: 120 },
     { field: "description", headerName: "Description", width: 150 },
-    { field: "amount", headerName: "Amount (PKR)", width: 120 },
-    { field: "date", headerName: "Date", width: 180 },
+    {
+      field: "amount",
+      headerName: "Amount (PKR)",
+      width: 110,
+    },
+    { field: "date", headerName: "Date", width: 90 },
     {
       field: "action",
       headerName: "Action",
@@ -90,11 +94,11 @@ export default function Home() {
   const incomesTableColumns = [
     { field: "amount", headerName: "Amount (PKR)", width: 120 },
     { field: "source", headerName: "Source", width: 120 },
-    { field: "date", headerName: "Date", width: 180 },
+    { field: "date", headerName: "Date", width: 90 },
     {
       field: "account",
       headerName: "Account",
-      width: 150,
+      width: 120,
     },
     {
       field: "action",
@@ -397,7 +401,7 @@ export default function Home() {
               className="w-full m-auto bg-white col-span-1"
               rows={expenseTableData}
               columns={expensesTableColumns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row.id || new Date().getTime()}
               initialState={{
                 pagination: {
                   paginationModel: {
