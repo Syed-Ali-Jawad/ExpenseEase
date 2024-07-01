@@ -1,3 +1,4 @@
+import { LocalLaundryService } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -15,14 +16,36 @@ const getIncomesFromLocalStorage = (email) => {
 };
 const userDetail = JSON.parse(localStorage.getItem("Logged in ID"));
 // const email = userDetail?.email;
+export function getExpenses() {
+  const expenses = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.includes(userDetail.email) && key.includes("Expense")) {
+      const expense = JSON.parse(localStorage.getItem(key));
+      expenses.push(expense);
+    }
+  }
+  return expenses;
+}
+export function getIncomes() {
+  const incomes = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.includes(userDetail.email) && key.includes("Income")) {
+      const income = JSON.parse(localStorage.getItem(key));
+      incomes.push(income);
+    }
+  }
+  return incomes;
+}
 const reduxSlice = createSlice({
   name: "States",
   initialState: {
-    userDetail: JSON.parse(localStorage.getItem("Logged in ID")),
+    userDetail: userDetail,
     isAddExpenseModalOpen: false,
     isAddIncomeModalOpen: false,
-    expenses: [],
-    incomes: [],
+    expenses: getExpenses(),
+    incomes: getIncomes(),
     selectedMonth: null,
     selectedYear: null,
     selectedCategory: null,

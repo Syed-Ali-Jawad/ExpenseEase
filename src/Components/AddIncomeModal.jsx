@@ -38,13 +38,12 @@ export default function AddIncomeModal() {
     useState(false);
   const [newIncomeAccount, setNewIncomeAccount] = useState();
 
-  console.log(incomes);
-
   function addIncomeHandler() {
     if (incomeAmount && incomeAmount > 0 && incomeDate && incomeSource) {
       localStorage.setItem(
-        `${userDetail.email} Income: ${incomeDate}`,
+        `${userDetail.email} Income: id:${new Date().getTime()}`,
         JSON.stringify({
+          id: new Date().getTime(),
           amount: incomeAmount,
           date: incomeDate,
           source: incomeSource,
@@ -55,6 +54,7 @@ export default function AddIncomeModal() {
         setIncomes([
           ...incomes,
           {
+            id: new Date().getTime(),
             amount: incomeAmount,
             date: incomeDate,
             source: incomeSource,

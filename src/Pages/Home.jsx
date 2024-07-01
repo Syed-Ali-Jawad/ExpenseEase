@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { PieChart, LineChart } from "@mui/x-charts";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import { IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
@@ -17,6 +17,8 @@ import {
   setIncomes,
   setAccountsArray,
   setShallShowNavBar,
+  getExpenses,
+  getIncomes,
 } from "../Store";
 import DeleteAccountAlertModal from "../Components/DeleteAccountAlertModal";
 import zIndex from "@mui/material/styles/zIndex";
@@ -42,17 +44,66 @@ export default function Home() {
   const [incomeCardsData, setIncomeCardsData] = useState([]);
   const accountsArray = useSelector((state) => state.accountsArray);
   const userDetail = useSelector((state) => state.userDetail);
+  const [isExpenseDeleted, setIsExpenseDeleted] = useState();
+  const [isIncomeDeleted, setIsIncomeDeleted] = useState();
+  function deleteIncome(row) {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.includes(userDetail.email) && key.includes("Income")) {
+        const income = JSON.parse(localStorage.getItem(key));
+        if (income.id === row.id) {
+          localStorage.removeItem(key);
+          dispatch(setIncomes(getIncomes()));
+          break;
+        }
+      }
+    }
+    setIsIncomeDeleted(false);
+  }
+  function deleteExpense(row) {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.includes(userDetail.email) && key.includes("Expense")) {
+        const expense = JSON.parse(localStorage.getItem(key));
+        if (expense.id === row.id) {
+          localStorage.removeItem(key);
+          dispatch(setExpenses(getExpenses()));
+          break;
+        }
+      }
+    }
+  }
   const expensesTableColumns = [
     { field: "category", headerName: "Category", width: 120 },
     { field: "description", headerName: "Description", width: 150 },
     { field: "amount", headerName: "Amount (PKR)", width: 120 },
     { field: "date", headerName: "Date", width: 180 },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 120,
+      renderCell: (params) => (
+        <Button onClick={() => deleteExpense(params.row)}>Delete</Button>
+      ),
+    },
   ];
   const incomesTableColumns = [
     { field: "amount", headerName: "Amount (PKR)", width: 120 },
     { field: "source", headerName: "Source", width: 120 },
     { field: "date", headerName: "Date", width: 180 },
-    { field: "account", headerName: "Account", width: 150 },
+    {
+      field: "account",
+      headerName: "Account",
+      width: 150,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 120,
+      renderCell: (params) => (
+        <Button onClick={() => deleteIncome(params.row)}>Delete</Button>
+      ),
+    },
   ];
   // const [isExpenseClicked, setIsExpenseClicked] = useState(false);
   const isExpenseClicked = useSelector((state) => state.isExpenseClicked);
@@ -92,7 +143,7 @@ export default function Home() {
         { value: expenseSum, label: category },
       ]);
     });
-    let expenseTableData = expenses.filter((entry) => entry || null);
+    let expenseTableData = expenses.filter((entry) => entry);
     if (selectedCategory && selectedCategory !== "Category") {
       expenseTableData = expenseTableData.filter(
         (expense) => expense.category === selectedCategory
@@ -108,6 +159,7 @@ export default function Home() {
         (expense) => new Date(expense.date).getFullYear() == selectedYear
       );
     }
+    console.log(expenseTableData, expenses);
     setExpenseTableData(expenseTableData);
   }, [
     expenses,
@@ -243,30 +295,9 @@ export default function Home() {
     selectedMonth,
     selectedYear,
     selectedSource,
+
     selectedAccount,
   ]);
-  useEffect(() => {
-    if (userDetail?.email) {
-      const expenseEntries = [];
-      const incomeEntries = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.includes("Expense:") && key.includes(userDetail.email)) {
-          const item = JSON.parse(localStorage.getItem(key));
-          if (item) {
-            expenseEntries.push(item);
-          }
-        } else if (key.includes("Income:") && key.includes(userDetail.email)) {
-          const item = JSON.parse(localStorage.getItem(key));
-          if (item) {
-            incomeEntries.push(item);
-          }
-        }
-      }
-      dispatch(setExpenses(expenseEntries));
-      dispatch(setIncomes(incomeEntries));
-    }
-  }, [userDetail, dispatch]);
 
   return (
     <>
@@ -366,7 +397,7 @@ export default function Home() {
               className="w-full m-auto bg-white col-span-1"
               rows={expenseTableData}
               columns={expensesTableColumns}
-              getRowId={(row) => row.date}
+              getRowId={(row) => row.id}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -474,7 +505,7 @@ export default function Home() {
               className="w-full m-auto bg-white"
               rows={incomeTableData}
               columns={incomesTableColumns}
-              getRowId={(row) => row.date}
+              getRowId={(row) => row.id || new Date().getTime()}
               disableRowSelectionOnClick
               initialState={{
                 pagination: {

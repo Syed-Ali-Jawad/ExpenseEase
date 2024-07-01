@@ -49,8 +49,9 @@ export default function AddExpenseModal() {
   function addExpenseHandler() {
     if (expenseAmount && expenseAmount > 0 && expenseDate && expenseCategory) {
       localStorage.setItem(
-        `${userDetail.email} Expense: ${expenseDate}`,
+        `${userDetail.email} Expense id:${new Date().getTime()}`,
         JSON.stringify({
+          id: new Date().getTime(),
           amount: expenseAmount,
           description: expenseDescription,
           date: expenseDate,
@@ -61,6 +62,7 @@ export default function AddExpenseModal() {
         setExpenses([
           ...expenses,
           {
+            id: new Date().getTime(),
             amount: expenseAmount,
             description: expenseDescription,
             date: expenseDate,

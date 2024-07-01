@@ -11,7 +11,7 @@ import loginImage from "../assets/login image.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUserDetail } from "../Store";
+import { setIsExpenseClicked, setUserDetail } from "../Store";
 
 export default function LoginPage() {
   const [email, setEmail] = useState();

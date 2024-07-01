@@ -306,6 +306,7 @@ export default function NavBar() {
               navigate("/ExpenseEase/"),
                 localStorage.removeItem("Logged in ID");
               setIsSettingsMenuOpen(false);
+              dispatch(shallShowNavBar(false));
             }}
             sx={{ color: "black" }}
           >
