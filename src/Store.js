@@ -2,25 +2,13 @@ import { LocalLaundryService } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 
-const getIncomesFromLocalStorage = (email) => {
-  const entries = Array.from({ length: localStorage.length }).map(
-    (_, index) => {
-      const key = localStorage.key(index);
-      if (key.includes("Income:") && key.includes(email)) {
-        return JSON.parse(localStorage.getItem(key));
-      }
-      return null;
-    }
-  );
-  return entries.filter((entry) => entry || null);
-};
 const userDetail = JSON.parse(localStorage.getItem("Logged in ID"));
 // const email = userDetail?.email;
 export function getExpenses() {
   const expenses = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.includes(userDetail.email) && key.includes("Expense")) {
+    if (key.includes(userDetail?.email) && key.includes("Expense")) {
       const expense = JSON.parse(localStorage.getItem(key));
       expenses.push(expense);
     }
@@ -31,12 +19,25 @@ export function getIncomes() {
   const incomes = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.includes(userDetail.email) && key.includes("Income")) {
+    if (key.includes(userDetail?.email) && key.includes("Income")) {
       const income = JSON.parse(localStorage.getItem(key));
       incomes.push(income);
     }
   }
   return incomes;
+}
+function getIncomeAccounts() {
+  if (localStorage.getItem(`${userDetail?.email} IncomeAccounts`)) {
+    return JSON.parse(
+      localStorage.getItem(`${userDetail?.email} IncomeAccounts`)
+    );
+  } else {
+    localStorage.setItem(
+      `${userDetail?.email} IncomeAccounts`,
+      JSON.stringify(["Cash"])
+    );
+    return ["Cash"];
+  }
 }
 const reduxSlice = createSlice({
   name: "States",
@@ -54,9 +55,7 @@ const reduxSlice = createSlice({
     isExpenseClicked: true,
     expenseCategories: ["Housing", "Transportation", "Food and Dining"],
     incomeSources: ["Salary", "Investment", "Allowance"],
-    accountsArray: JSON.parse(
-      localStorage.getItem(`${userDetail?.email} IncomeAccounts`)
-    ),
+    accountsArray: getIncomeAccounts(),
 
     selectedAccount: null,
     months: [

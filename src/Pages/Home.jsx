@@ -224,9 +224,20 @@ export default function Home() {
   useEffect(() => {
     setIncomeCardsData([]);
     accountsArray.forEach((account) => {
-      const incomeAccountData = incomes.filter(
+      let incomeAccountData = incomes.filter(
         (income) => income.account === account
       );
+      if (selectedMonth && selectedMonth !== "Month") {
+        incomeAccountData = incomeAccountData.filter(
+          (income) => new Date(income.date).getMonth() + 1 === selectedMonth
+        );
+      }
+      if (selectedYear && selectedYear !== "Year") {
+        incomeAccountData = incomeAccountData.filter(
+          (income) => new Date(income.date).getFullYear() === selectedYear
+        );
+      }
+
       const incomeInAccount = incomeAccountData.reduce(
         (sum, account) => (sum += +account.amount),
         0
@@ -236,7 +247,7 @@ export default function Home() {
         { account: account, income: incomeInAccount },
       ]);
     });
-  }, [incomes, isIncomeClicked]);
+  }, [incomes, isIncomeClicked, selectedMonth, selectedYear]);
 
   useEffect(() => {
     setIncomePieData([]);
@@ -271,7 +282,7 @@ export default function Home() {
         { value: incomeSum, label: source },
       ]);
     });
-    let incomeTableData = incomes.filter((entry) => entry || null);
+    let incomeTableData = incomes.filter((entry) => entry);
     if (selectedSource && selectedSource !== "Source") {
       incomeTableData = incomeTableData.filter(
         (income) => income.source === selectedSource
@@ -514,37 +525,67 @@ export default function Home() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 5,
+                    pageSize: 10,
                   },
                 },
               }}
-              pageSizeOptions={[5]}
+              pageSizeOptions={[10]}
             />
-
-            <Card
-              sx={{
-                width: window.innerWidth > 767 ? "90%" : "100%  ",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "5%",
-              }}
-            >
-              <PieChart
-                series={[
-                  {
-                    data: incomePieData,
-                    highlightScope: { faded: "global", highlighted: "item" },
-                    faded: {
-                      innerRadius: 30,
-                      additionalRadius: -30,
-                      color: "gray",
+            <div className="flex flex-col gap-2">
+              <Card
+                sx={{
+                  width: window.innerWidth > 767 ? "90%" : "100%  ",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "5%",
+                }}
+              >
+                <PieChart
+                  series={[
+                    {
+                      data: incomePieData,
+                      highlightScope: { faded: "global", highlighted: "item" },
+                      faded: {
+                        innerRadius: 30,
+                        additionalRadius: -30,
+                        color: "gray",
+                      },
                     },
-                  },
-                ]}
-                height={window.innerWidth > 767 ? 200 : 120}
-              />
-            </Card>
+                  ]}
+                  height={window.innerWidth > 767 ? 200 : 120}
+                />
+              </Card>
+              <Card
+                sx={{
+                  width: window.innerWidth > 767 ? "90%" : "100%  ",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "5%",
+                }}
+              >
+                <PieChart
+                  series={[
+                    {
+                      data: [
+                        ...incomeCardsData.map((data) => ({
+                          value: data.income,
+                          label: data.account,
+                        })),
+                      ],
+                      highlightScope: { faded: "global", highlighted: "item" },
+                      faded: {
+                        innerRadius: 30,
+                        additionalRadius: -30,
+                        color: "gray",
+                      },
+                    },
+                  ]}
+                  height={window.innerWidth > 767 ? 200 : 120}
+                />
+              </Card>
+            </div>
             {/* <Card
                 sx={{
                   width: "90%",
