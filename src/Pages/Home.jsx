@@ -282,7 +282,9 @@ export default function Home() {
         { value: incomeSum, label: source },
       ]);
     });
-    let incomeTableData = incomes.filter((entry) => entry);
+    let incomeTableData = incomes.filter(
+      (entry) => entry.amount && entry.source && entry.date && entry.account
+    );
     if (selectedSource && selectedSource !== "Source") {
       incomeTableData = incomeTableData.filter(
         (income) => income.source === selectedSource
