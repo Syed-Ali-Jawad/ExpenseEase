@@ -142,10 +142,12 @@ export default function Home() {
       }, 0);
 
       // expensePieData.push({ value: expenseSum, label: category });
-      setExpensePieData((prevPieData) => [
-        ...prevPieData,
-        { value: expenseSum, label: category },
-      ]);
+      if (expenseSum > 0) {
+        setExpensePieData((prevPieData) => [
+          ...prevPieData,
+          { value: expenseSum, label: category },
+        ]);
+      }
     });
     let expenseTableData = expenses.filter((entry) => entry);
     if (selectedCategory && selectedCategory !== "Category") {
@@ -277,10 +279,12 @@ export default function Home() {
 
       // console.log(filtered, incomeSum);
       // incomePieData.push({ value: incomeSum, label: source });
-      setIncomePieData((prevPieData) => [
-        ...prevPieData,
-        { value: incomeSum, label: source },
-      ]);
+      if (incomeSum > 0) {
+        setIncomePieData((prevPieData) => [
+          ...prevPieData,
+          { value: incomeSum, label: source },
+        ]);
+      }
     });
     let incomeTableData = incomes.filter(
       (entry) => entry.amount && entry.source && entry.date && entry.account
@@ -571,10 +575,14 @@ export default function Home() {
                   series={[
                     {
                       data: [
-                        ...incomeCardsData.map((data) => ({
-                          value: data.income,
-                          label: data.account,
-                        })),
+                        ...incomeCardsData.map((data) => {
+                          if (data.income > 0) {
+                            return {
+                              value: data.income,
+                              label: data.account,
+                            };
+                          }
+                        }),
                       ],
                       highlightScope: { faded: "global", highlighted: "item" },
                       faded: {

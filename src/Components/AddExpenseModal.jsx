@@ -29,6 +29,7 @@ export default function AddExpenseModal() {
   const [expenseAmount, setExpenseAmount] = useState();
   const [expenseDate, setExpenseDate] = useState();
   const [expenseCategory, setExpenseCategory] = useState();
+  const expenseCategories = useSelector((state) => state.expenseCategories);
   // const [expenses, setExpenses] = useState([]);
   const expenses = useSelector((state) => state.expenses);
   const userDetail = useSelector((state) => state.userDetail);
@@ -71,6 +72,7 @@ export default function AddExpenseModal() {
         ])
       );
       dispatch(setIsAddExpenseModalOpen(false));
+
       setExpenseDescription(null);
       setExpenseCategory(null);
       setExpenseDate(null);
@@ -129,9 +131,9 @@ export default function AddExpenseModal() {
           defaultValue="Select Category"
         >
           <MenuItem value="Select Category">Select Category</MenuItem>
-          <MenuItem value="Housing">Housing</MenuItem>
-          <MenuItem value="Transportation">Transportation</MenuItem>
-          <MenuItem value="Food and Dining">Food and Dining</MenuItem>
+          {expenseCategories.map((category) => (
+            <MenuItem value={category}>{category}</MenuItem>
+          ))}
         </Select>
 
         <Button variant="contained" onClick={addExpenseHandler}>

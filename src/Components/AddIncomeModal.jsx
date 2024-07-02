@@ -37,6 +37,7 @@ export default function AddIncomeModal() {
   const [isAddIncomeAccountClicked, setIsAddIncomeAccountClicked] =
     useState(false);
   const [newIncomeAccount, setNewIncomeAccount] = useState();
+  const incomeSources = useSelector((state) => state.incomeSources);
 
   function addIncomeHandler() {
     if (incomeAmount && incomeAmount > 0 && incomeDate && incomeSource) {
@@ -115,9 +116,9 @@ export default function AddIncomeModal() {
           defaultValue="Select Income Source"
         >
           <MenuItem value="Select Income Source">Select Income Source</MenuItem>
-          <MenuItem value="Salary">Salary</MenuItem>
-          <MenuItem value="Investment">Investment</MenuItem>
-          <MenuItem value="Allowance">Allowance</MenuItem>
+          {incomeSources.map((source) => (
+            <MenuItem value={source}>{source}</MenuItem>
+          ))}
         </Select>
         <Select
           fullWidth
