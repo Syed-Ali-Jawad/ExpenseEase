@@ -455,7 +455,7 @@ export default function Home() {
                     },
                   },
                 ]}
-                height={window.innerWidth > 767 ? 200 : 120}
+                height={window.innerWidth > 767 ? 200 : 160}
               />
             </Card>
             {/* <Card
@@ -563,7 +563,7 @@ export default function Home() {
                       },
                     },
                   ]}
-                  height={window.innerWidth > 767 ? 200 : 120}
+                  height={window.innerWidth > 767 ? 200 : 160}
                 />
               </Card>
               <Card
@@ -596,7 +596,7 @@ export default function Home() {
                       },
                     },
                   ]}
-                  height={window.innerWidth > 767 ? 200 : 120}
+                  height={window.innerWidth > 767 ? 200 : 160}
                 />
               </Card>
             </div>
