@@ -19,13 +19,40 @@ export default function SignupPage() {
   const [password, setPassword] = useState();
   const [confirmPswd, setConfirmPswd] = useState();
   const [showPassword, setShowPassword] = useState();
+  const [showConfirmPassword, setShowConfirmPassword] = useState();
+  const [emailValidationError, setEmailValidationError] = useState();
+  const [passwordValidationError, setPasswordValidationError] = useState();
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState();
   const navigate = useNavigate();
 
   function emailValidation(email) {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (regex.test(email)) {
+      setEmailValidationError(null);
       setEmail(email);
     } else {
+      setEmailValidationError(
+        <Typography variant="body2" sx={{ color: "red" }}>
+          Enter valid email
+        </Typography>
+      );
+      return;
+    }
+  }
+  function passwordValidation(password) {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (regex.test(password)) {
+      setPasswordValidationError(null);
+      setPassword(password);
+    } else {
+      setPasswordValidationError(
+        <Typography variant="body2" sx={{ color: "red" }}>
+          Password shall contain atleast one uppercase letter, one lowercase,
+          one number and one special character and shall be at least 8
+          characters long.
+        </Typography>
+      );
       return;
     }
   }
@@ -40,6 +67,16 @@ export default function SignupPage() {
     );
     localStorage.setItem(`${email} IncomeAccounts`, JSON.stringify(["Cash"]));
     navigate("/ExpenseEase/");
+  }
+  function passwordConfirmation(confirmPassword) {
+    setConfirmPswd(confirmPassword);
+    confirmPassword !== password
+      ? setPasswordConfirmationError(
+          <Typography variant="body2" sx={{ color: "red" }}>
+            Both password don't match
+          </Typography>
+        )
+      : setPasswordConfirmationError(null);
   }
   return (
     <div className="w-screen h-screen sm:grid grid-cols-2">
@@ -72,8 +109,6 @@ export default function SignupPage() {
             justifyContent: "center",
             alignItems: "center",
 
-            height: "70%",
-
             padding: "5% 10%",
             borderRadius: "20px",
             margin: "auto",
@@ -98,8 +133,9 @@ export default function SignupPage() {
             fullWidth
             label="Email"
           />
+          {emailValidationError || null}
           <TextField
-            onChange={(e) => setPassword(e.target.value.trim())}
+            onChange={(e) => passwordValidation(e.target.value.trim())}
             required
             type={showPassword ? "text" : "password"}
             fullWidth
@@ -122,12 +158,32 @@ export default function SignupPage() {
               ),
             }}
           />
+          {passwordValidationError || null}
           <TextField
-            onChange={(e) => setConfirmPswd(e.target.value.trim())}
+            onChange={(e) => passwordConfirmation(e.target.value.trim())}
             required
+            type={showConfirmPassword ? "text" : "password"}
             fullWidth
             label="Confirm Password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() =>
+                      showConfirmPassword === true
+                        ? setShowConfirmPassword(false)
+                        : setShowConfirmPassword(true)
+                    }
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
+          {passwordConfirmationError || null}
           <Button
             disabled={
               username &&
