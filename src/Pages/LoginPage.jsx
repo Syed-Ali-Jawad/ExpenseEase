@@ -30,7 +30,11 @@ export default function LoginPage() {
         dispatch(setUserDetail(userdata));
         navigate("/ExpenseEase/home");
       } else {
-        setLoginError(<p>Wrong Credentials</p>);
+        setLoginError(
+          <Typography variant="body2" sx={{ color: "red" }}>
+            Wrong Credentials
+          </Typography>
+        );
       }
     } else {
       setLoginError(<p>Wrong Credentials</p>);
