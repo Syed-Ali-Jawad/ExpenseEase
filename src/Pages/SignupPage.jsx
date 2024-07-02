@@ -127,7 +127,7 @@ export default function SignupPage() {
             label="Username"
           />
           <TextField
-            onChange={(e) => emailValidation(e.target.value.trim())}
+            onBlur={(e) => emailValidation(e.target.value.trim())}
             sx={{ margin: "0 auto" }}
             required
             fullWidth
@@ -135,7 +135,7 @@ export default function SignupPage() {
           />
           {emailValidationError || null}
           <TextField
-            onChange={(e) => passwordValidation(e.target.value.trim())}
+            onBlur={(e) => passwordValidation(e.target.value.trim())}
             required
             type={showPassword ? "text" : "password"}
             fullWidth
