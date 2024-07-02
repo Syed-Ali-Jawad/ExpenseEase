@@ -144,10 +144,12 @@ export default function Home() {
 
         // expensePieData.push({ value: expenseSum, label: category });
         // if (expenseSum > 0) {
-        setExpensePieData((prevPieData) => [
-          ...prevPieData,
-          { value: expenseSum, label: category },
-        ]);
+        if (expenseSum > 0) {
+          setExpensePieData((prevPieData) => [
+            ...prevPieData,
+            { value: expenseSum, label: category },
+          ]);
+        }
       }
       // }
     );
