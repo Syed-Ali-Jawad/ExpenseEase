@@ -122,33 +122,35 @@ export default function Home() {
 
   useEffect(() => {
     setExpensePieData([]);
-    expenseCategories.forEach((category) => {
-      let filteredExpenses = expenses.filter(
-        (expense) => expense.category === category
-      );
-      if (selectedMonth && selectedMonth !== "Month") {
-        filteredExpenses = filteredExpenses.filter(
-          (expense) => new Date(expense.date).getMonth() + 1 == selectedMonth
+    expenseCategories.forEach(
+      (category) => {
+        let filteredExpenses = expenses.filter(
+          (expense) => expense.category === category
         );
-      }
-      if (selectedYear && selectedYear !== "Year") {
-        filteredExpenses = filteredExpenses.filter(
-          (expense) => new Date(expense.date).getFullYear() == selectedYear
-        );
-      }
-      let expenseSum = filteredExpenses.reduce((sum, expense) => {
-        sum += +expense.amount;
-        return sum;
-      }, 0);
+        if (selectedMonth && selectedMonth !== "Month") {
+          filteredExpenses = filteredExpenses.filter(
+            (expense) => new Date(expense.date).getMonth() + 1 == selectedMonth
+          );
+        }
+        if (selectedYear && selectedYear !== "Year") {
+          filteredExpenses = filteredExpenses.filter(
+            (expense) => new Date(expense.date).getFullYear() == selectedYear
+          );
+        }
+        let expenseSum = filteredExpenses.reduce((sum, expense) => {
+          sum += +expense.amount;
+          return sum;
+        }, 0);
 
-      // expensePieData.push({ value: expenseSum, label: category });
-      if (expenseSum > 0) {
+        // expensePieData.push({ value: expenseSum, label: category });
+        // if (expenseSum > 0) {
         setExpensePieData((prevPieData) => [
           ...prevPieData,
           { value: expenseSum, label: category },
         ]);
       }
-    });
+      // }
+    );
     let expenseTableData = expenses.filter((entry) => entry);
     if (selectedCategory && selectedCategory !== "Category") {
       expenseTableData = expenseTableData.filter(
